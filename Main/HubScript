@@ -10,10 +10,16 @@ Client = {
         JumpPower = 50,
         Version = "0.02",
     },
+	CombatWarriors = {
+		killsay = false,
+	},
 	VictoryRace = {
 		Autofarm = false,
 	}
 }
+
+-- toxicity
+local words = {"ez","trash","touch grass","i love among us","the impostor?!?!?!","grass? whats that","is your dad spiderman? because he far from home","do you ever have problems with light users parrying your ds???","how are you that bad??🤣🤣😂🤣🤣","EZ EZ EZ EZ EZ","dont even bother insulting me 🤣🤣😂","do you like cheese?","are you even trying to kill me???","get rekt noobie","imagine dying","L Bozo","clapped","nothing personel kid","damn bro you got the whole squad laughing 😂😂🤣","imagine targetting someone. but get clapped afterwards","according to the rules. You should not be hacking because it can get you banned 🤓🤓🤓","nerds be like: OMG LOOK AT THAT HACKER!!! LET'S GET HIM!!!🤓🤓🤓","why am i still writing this? -Probably ZaneIs","haha got you!!!","how are you that bad??🤣😂","нуб бозо","my reaction to that information 😐","OmG nO wAY a hACker!!!","Super Idol的笑容","goddamn i'm still writing -Probably ZaneIs","have you ever heard the hitgame AmongUs???","fr?",'skill issue',"touch grass losers","this move is called 'Devious Lick'","*Gorilla Sounds*","What's up guys it's quandale dingle here.","Bro got fake Jordans 💀","Caught in 4K","Turi ip ip","Say goodbye to your Kneecaps"}
 
 InfiniteJumpEnabled = false
 
@@ -60,7 +66,40 @@ end
 if game.PlaceId == 4282985734 then
 	local cwTab = Window:MakeTab({Name="Combat Warriors",Icon = "rbxassetid://4483345998",PremiumOnly = false})
 	cwMain = cwTab:AddSection({Name="Main"})
-	cwMain:AddLabel("Coming soon..")
+
+	-- cheesekids anticheat bypass (i didnt feel like making one)
+	for i,v in pairs(getgc(true)) do
+		if typeof(v) == "table" and rawget(v, "kick") then
+			v.kick =  function()
+				return
+			end
+		end
+	
+		if typeof(v) == 'table' and rawget(v, 'getIsBodyMoverCreatedByGame') then
+			v.getIsBodyMoverCreatedByGame = function(among)
+				return true
+			end
+	   end
+	   if typeof(v) == "table" and rawget(v, "randomDelayKick") then
+			v.randomDelayKick = function()
+				return wait(9e9)
+			end
+		end
+	end
+
+	Players.LocalPlayer.leaderstats.Score.Changed:Connect(function()
+		if Client.CombatWarriors.killsay then
+			game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(words[math.random(1, #words)])
+		end
+	end)
+
+	cwMain:AddToggle({
+		Name = "Killsay",
+		Default = false,
+		Callback = function(Value)
+			Client.CombatWarriors.killsay = Value
+		end    
+	})
 end
 
 if game.PlaceId == 4951858512 then
