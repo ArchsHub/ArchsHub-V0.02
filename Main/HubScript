@@ -157,7 +157,7 @@ if game.PlaceId == 4282985734 then
 	})
 
 	cwMain:AddToggle({
-		Name = "Reach",
+		Name = "Parry Cooldown",
 		Default = false,
 		Callback = function(Value)
 			for i,v in pairs(getgc(true)) do
