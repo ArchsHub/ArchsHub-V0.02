@@ -3,6 +3,7 @@ local OrionLib = loadstring(game:HttpGet(("https://raw.githubusercontent.com/shl
 local Window = OrionLib:MakeWindow({Name = "Archs Hub", HidePremium = false, SaveConfig = true, IntroEnabled = false})
 
 local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
 
 Client = {
     Values = {
@@ -87,7 +88,13 @@ if game.PlaceId == 4282985734 then
 		end
 	end
 
-	game.Players.LocalPlayer.leaderstats.Score.Changed:Connect(function()
+	Players.PlayerRemoving:Connect(function(v)
+		if table.find(players, v.Name) then
+			table.remove(players, players[v.Name])
+		end
+	end)
+
+	Players.LocalPlayer.leaderstats.Score.Changed:Connect(function()
 		if Client.CombatWarriors.killsay then
 			game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(words[math.random(1, #words)])
 		end
