@@ -87,7 +87,7 @@ if game.PlaceId == 4282985734 then
 		end
 	end
 
-	Players.LocalPlayer.leaderstats.Score.Changed:Connect(function()
+	game.Players.LocalPlayer.leaderstats.Score.Changed:Connect(function()
 		if Client.CombatWarriors.killsay then
 			game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(words[math.random(1, #words)])
 		end
