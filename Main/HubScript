@@ -1,0 +1,161 @@
+-- Documentation: https://github.com/shlexware/Orion/blob/main/Documentation.md --
+local OrionLib = loadstring(game:HttpGet(("https://raw.githubusercontent.com/shlexware/Orion/main/source")))()
+local Window = OrionLib:MakeWindow({Name = "Archs Hub", HidePremium = false, SaveConfig = true, IntroEnabled = false})
+
+local TeleportService = game:GetService("TeleportService")
+
+Client = {
+    Values = {
+        WalkSpeed = 16,
+        JumpPower = 50,
+        Version = "0.02",
+    },
+	VictoryRace = {
+		Autofarm = false,
+	}
+}
+
+InfiniteJumpEnabled = false
+
+OrionLib:MakeNotification({
+	Name = "Welcome!",
+	Content = "Logged in as "..game.Players.LocalPlayer.Name.."!",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+local HomeTab = Window:MakeTab({
+	Name = "Home",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+-- Home Variables
+homeSection = HomeTab:AddSection({Name = "Home"})
+homeSection:AddLabel("Welcome, "..game.Players.LocalPlayer.Name.."!")
+homeSection:AddLabel("You are using Version "..Client.Values.Version.."!")
+homeSection:AddLabel("Thank you for using Archs Hub! Much love!")
+local updateLogSection = HomeTab:AddSection({Name = "Update Logs"})
+updateLogSection:AddLabel("Added 'Universal' script section.")
+updateLogSection:AddLabel("- That's all! Check back later!")
+local gameListSection = HomeTab:AddSection({Name = "Supported Games"})
+gameListSection:AddButton({Name = "Combat Warriors",Callback = function()game:GetService('TeleportService'):Teleport(4282985734)end})
+gameListSection:AddButton({Name = "My Restaurant!",Callback = function()game:GetService('TeleportService'):Teleport(4490140733)end})
+gameListSection:AddButton({Name = "Arsenal",Callback = function()game:GetService('TeleportService'):Teleport(286090429)end})
+gameListSection:AddButton({Name = "BIG Paintball",Callback = function()game:GetService('TeleportService'):Teleport(3527629287)end})
+gameListSection:AddButton({Name = "Piggy",Callback = function()game:GetService('TeleportService'):Teleport(4623386862)end})
+
+if game.PlaceId == 4490140733 then
+	local mrTab = Window:MakeTab({Name = "My Restaurant!",Icon = "rbxassetid://4483345998",PremiumOnly = false})
+	mrMain = mrTab:AddSection({Name = "Main"})
+	mrMain:AddButton({Name = "Fast Autofarm [Unstoppable]",Callback = function()loadstring(game:HttpGet("https://raw.githubusercontent.com/ArchsHub/ArchsHub-V0.02/main/My%20Restaurant/Autofarm"),true)()end})
+end
+
+if game.PlaceId == 3527629287 then
+	local bpTab = Window:MakeTab({Name="BIG Paintball!",Icon = "rbxassetid://4483345998",PremiumOnly = false})
+	bpMain = bpTab:AddSection({Name="Main"})
+	bpMain:AddButton({Name = "Unlock all guns!",Callback = function()loadstring(game:HttpGet("https://raw.githubusercontent.com/ArchsHub/ArchsHub-V0.02/main/BIG%20Paintball/UnlockGuns"),true)()end})
+end
+
+if game.PlaceId == 4282985734 then
+	local cwTab = Window:MakeTab({Name="Combat Warriors",Icon = "rbxassetid://4483345998",PremiumOnly = false})
+	cwMain = cwTab:AddSection({Name="Main"})
+	cwMain:AddLabel("Coming soon..")
+end
+
+if game.PlaceId == 4951858512 then
+	local vrTab = Window:MakeTab({Name="Victory Race",Icon = "rbxassetid://4483345998",PremiumOnly = false})
+	vrAutofarm = vrTab:AddSection({Name = "Autofarms"})
+
+	vrAutofarm:AddToggle({
+		Name = "Autofarm",
+		Default = false,
+		Callback = function(Value)
+			Client.VictoryRace.Autofarm = Value
+			if Client.VictoryRace.Autofarm then
+				autofarmwins()
+			end
+		end    
+	})
+end
+
+local function loadAllTabs()
+
+	local UniversalTab = Window:MakeTab({
+		Name = "Universal",
+		Icon = "rbxassetid://4483345998",
+		PremiumOnly = false
+	})
+
+	if game.PlaceId == 4951858512 then
+		UniversalTab:AddLabel("This game does not support universal scripts.")
+		UniversalTab:AddLabel("Reason: All scripts are able to break this entire game.")
+		UniversalTab:AddLabel("Game: Victory Race | 4951858512")
+	else
+		universalSection = UniversalTab:AddSection({Name = "LocalPlayer"})
+	
+	universalSection:AddSlider({Name = "WalkSpeed",Min = 16,Max = 300,Default = 16,Color = Color3.fromRGB(255,255,255),Increment = 1,ValueName = "Walkspeed #",
+		Callback = function(Value)
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+		end    
+	})
+	
+	universalSection:AddSlider({Name = "JumpPower",Min = 50,Max = 500,Default = 50,Color = Color3.fromRGB(255,255,255),Increment = 1,ValueName = "JumpPower #",
+		Callback = function(Value)
+			game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+		end    
+	})
+
+	universalSection:AddSlider({Name = "FOV",Min = 0,Max = 120,Default = 70,Color = Color3.fromRGB(255,255,255),Increment = 1,ValueName = "FOV #",
+		Callback = function(Value)
+			game.Workspace.Camera.FieldOfView = Value
+		end    
+	})
+	
+	universalSection:AddToggle({
+		Name = "Infinite Jump",
+		Default = false,
+		Callback = function(Value)
+			InfiniteJumpEnabled = Value
+		end    
+	})
+	end
+
+	local ScriptHub = Window:MakeTab({
+		Name = "Script Hub",
+		Icon = "rbxassetid://4483345998",
+		PremiumOnly = false
+	})
+	
+	mainScriptHub = ScriptHub:AddSection({Name = "Main"})
+	
+	mainScriptHub:AddButton({Name = "R6 Bang GUI",Callback = function()loadstring(game:HttpGet("https://raw.githubusercontent.com/ArchsHub/ArchsHub-V0.02/main/Fun%20Scripts/BangGui"),true)()end})
+	
+	clientScriptHub = ScriptHub:AddSection({Name = "Client-Sided"})
+
+	clientScriptHub:AddButton({Name = "Headless Horseman",Callback = function()loadstring(game:HttpGet("https://raw.githubusercontent.com/ArchsHub/ArchsHub-V0.02/main/Fun%20Scripts/Headless"),true)()end})
+	
+	game:GetService("UserInputService").JumpRequest:connect(function()
+		if InfiniteJumpEnabled then
+			game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+		end
+	end)
+end
+
+loadAllTabs()
+
+function autofarmwins()
+	spawn(function()
+		while Client.VictoryRace.Autofarm == true do
+			for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
+				if tostring(v) == "Win" and v:IsA("Part") then 
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+					wait(0.1)
+					break
+				end
+			end
+		end
+	end)
+end
+
+OrionLib:Init()
