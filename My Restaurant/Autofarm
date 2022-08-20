@@ -86,7 +86,7 @@ function Entity:WalkThroughWaypoints(voxelpoints, waypoints, startX, startZ)
 	if not self:BelongsToMyBakery() then
 		self.model.HumanoidRootPart.Anchored = false
 	end
-	
+	--
 	for i, v in ipairs(waypoints) do
 				
 		self.model.HumanoidRootPart.CFrame = CFrame.new(v)
