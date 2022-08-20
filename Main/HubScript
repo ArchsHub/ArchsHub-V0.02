@@ -148,65 +148,6 @@ if game.PlaceId == 4282985734 then
 		end
 	end)
 
-	combatKillauraSection:AddToggle({
-		Title = "reach",
-		Default = false
-		},
-		function(val)
-			Reaching = val
-			if val == false then return end
-			local character = game.Players.LocalPlayer.Character
-			local torso = character.Torso
-			local rightarm = character["Right Arm"]
-			local rightshoulder = torso["Right Shoulder"]
-			if rightshoulder and rightshoulder.Enabled == true then
-				local rightshoulderclone = rightshoulder:Clone()
-				rightshoulderclone.Enabled = false
-				rightshoulder:Destroy()
-				rightshoulderclone.Parent = torso
-			end
-		
-			for i,v in pairs(game.Players.LocalPlayer.Backpack:GetDescendants()) do
-				if v:IsA("BasePart") then
-					v.Massless = true
-				end
-			end
-			if rightarm:FindFirstChild("RagdollBallSocket") then
-				rightarm.RagdollBallSocket.Enabled = false
-			end
-			while Reaching do
-				sethiddenproperty(rightarm,"AssemblyLinearVelocity",Vector3.new(100,100,100))
-				rightarm.Velocity = Vector3.new(100,100,100)
-				if torso:FindFirstChild("Right Shoulder") then
-					local rightarm = character["Right Arm"]
-					local rightshoulder = torso["Right Shoulder"]
-		
-					local rightshoulderclone = rightshoulder:Clone()
-					rightshoulderclone.Enabled = false
-					rightshoulder:Destroy()
-					rightshoulderclone.Parent = torso
-				end
-		
-				local target = nil
-	
-				if reachchoice == "closest to player" then
-					target = getClosest()
-				elseif reachchoice == "closest to mouse" then
-					target = getClosestToMouse()
-					bruh.Adornee = target.Character
-				else
-					target = getClosest()
-				end
-				if target.Character:FindFirstChild("Head") and (character.Head.Position - target.Character.Head.Position).magnitude < 100 then
-					rightarm.CFrame = target.Character.Head.CFrame * CFrame.new(math.random(-0,0),0,0)
-				elseif character:FindFirstChild("Head") then
-					rightarm.CFrame = character.Head.CFrame * CFrame.new(math.random(-0,0),0,0)
-				end
-				game:GetService("RunService").Heartbeat:wait()
-			end
-		end
-	)
-
 	cwMain:AddToggle({
 		Name = "Killsay",
 		Default = false,
@@ -216,11 +157,21 @@ if game.PlaceId == 4282985734 then
 	})
 
 	cwMain:AddToggle({
-		Name = "No parry cooldown",
+		Title = "no parry cooldown",
 		Default = false,
-		Callback = function(Value)
-			Client.CombatWarriors.noparrycooldown = Value
-		end    
+		Callback = function(val)
+			for i,v in pairs(getgc(true)) do
+				if type(v) == "table" and rawget(v, "PARRY_COOLDOWN_IN_SECONDS") and rawget(v, "PARRY_COOLDOWN_IN_SECONDS_AFTER_SUCCESSFUL_PARRY") then
+					if val then
+						v.PARRY_COOLDOWN_IN_SECONDS = 0
+						v.PARRY_COOLDOWN_IN_SECONDS_AFTER_SUCCESSFUL_PARRY = 0
+					else
+						v.PARRY_COOLDOWN_IN_SECONDS = 3
+						v.PARRY_COOLDOWN_IN_SECONDS_AFTER_SUCCESSFUL_PARRY = 0.33
+					end
+				end
+			end
+		end
 	})
 end
 
