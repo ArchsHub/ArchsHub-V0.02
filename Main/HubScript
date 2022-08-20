@@ -151,43 +151,14 @@ if game.PlaceId == 4282985734 then
 		end
 	end)
 
-	local function getClosestToMouse()
-		local player, nearestDistance = nil, math.huge
-		for i,v in pairs(Players:GetPlayers()) do
-			if v ~= Players.LocalPlayer and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 and v.Character:FindFirstChild("HumanoidRootPart") then
-				local root, visible = workspace.CurrentCamera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
-				if visible then
-					local distance = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(root.X, root.Y)).Magnitude
-	
-					if distance < nearestDistance then
-						nearestDistance = distance
-						player = v
-					end
-				end
-			end
-		end
-		return player
-	end
-
-	local function getClosest()
-		local hrp = Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position
-		local closest_distance = math.huge
-		local closestPlayer
-	
-		for i,v in pairs(game.Players:GetPlayers()) do
-			if v.Character ~= nil and v ~= Players.LocalPlayer and v.Character:FindFirstChild("HumanoidRootPart") ~= nil and v.Character:FindFirstChild("Humanoid").Health > 0 then
-				local plr_pos = v.Character.HumanoidRootPart.Position
-				local plr_distance = (hrp - plr_pos).Magnitude
-		
-				if plr_distance < closest_distance then
-					closest_distance = plr_distance
-					closestPlayer = v
-				end
-			end
-		end
-	
-		return closestPlayer
-	end
+	cwMain:AddTextbox({
+		Name = "Kill Sound [Client]",
+		Default = "",
+		TextDisappear = true,
+		Callback = function(Value)
+			game:GetService("ReplicatedStorage").Shared.Assets.Sounds.KillSound.SoundId = "rbxassetid://"..Value
+		end	  
+	})
 
 	cwMain:AddToggle({
 		Name = "Killsay",
@@ -213,73 +184,6 @@ if game.PlaceId == 4282985734 then
 				end
 			end
 		end    
-	})
-
-	cwKillaura:AddToggle({
-		Name = "Reach",
-		Default = "false",
-		Callback = function(Value)
-			Client.CombatWarriors.Reaching = val
-        	if val == false then return end
-        	local character = game.Players.LocalPlayer.Character
-        	local torso = character.Torso
-        	local rightarm = character["Right Arm"]
-        	local rightshoulder = torso["Right Shoulder"]
-        	if rightshoulder and rightshoulder.Enabled == true then
-        	    local rightshoulderclone = rightshoulder:Clone()
-        	    rightshoulderclone.Enabled = false
-        	    rightshoulder:Destroy()
-        	    rightshoulderclone.Parent = torso
-        	end
-    
-        	for i,v in pairs(game.Players.LocalPlayer.Backpack:GetDescendants()) do
-        	    if v:IsA("BasePart") then
-       	         	v.Massless = true
-           	 	end
-        	end
-        	if rightarm:FindFirstChild("RagdollBallSocket") then
-            	rightarm.RagdollBallSocket.Enabled = false
-        	end
-       		while Client.CombatWarriors.Reaching do
-            	sethiddenproperty(rightarm,"AssemblyLinearVelocity",Vector3.new(100,100,100))
-            	rightarm.Velocity = Vector3.new(100,100,100)
-            	if torso:FindFirstChild("Right Shoulder") then
-                	local rightarm = character["Right Arm"]
-                	local rightshoulder = torso["Right Shoulder"]
-    
-                	local rightshoulderclone = rightshoulder:Clone()
-                	rightshoulderclone.Enabled = false
-                	rightshoulder:Destroy()
-                	rightshoulderclone.Parent = torso
-            	end
-    
-            	local target = nil
-
-            	if Client.CombatWarriors.reachchoice == "closest to player" then
-                	target = getClosest()
-            	elseif Client.CombatWarriors.reachchoice == "closest to mouse" then
-                	target = getClosestToMouse()
-                	bruh.Adornee = target.Character
-            	else
-                	target = getClosest()
-            	end
-            	if target.Character:FindFirstChild("Head") and (character.Head.Position - target.Character.Head.Position).magnitude < 100 then
-                	rightarm.CFrame = target.Character.Head.CFrame * CFrame.new(math.random(-0,0),0,0)
-            	elseif character:FindFirstChild("Head") then
-                	rightarm.CFrame = character.Head.CFrame * CFrame.new(math.random(-0,0),0,0)
-				end
-            	game:GetService("RunService").Heartbeat:wait()
-        	end
-		end
-
-		cwKillaura:AddDropdown({
-			Name = "Reach Choice",
-			Default = "closest to player",
-			Options = {"closest to player", "closest to mouse"}
-			Callback = function(Value)
-				Client.CombatWarriors.reachchoice = Value
-			end   
-		}) 
 	})
 end
 
