@@ -157,12 +157,12 @@ if game.PlaceId == 4282985734 then
 	})
 
 	cwMain:AddToggle({
-		Title = "no parry cooldown",
+		Name = "Reach",
 		Default = false,
-		Callback = function(val)
+		Callback = function(Value)
 			for i,v in pairs(getgc(true)) do
 				if type(v) == "table" and rawget(v, "PARRY_COOLDOWN_IN_SECONDS") and rawget(v, "PARRY_COOLDOWN_IN_SECONDS_AFTER_SUCCESSFUL_PARRY") then
-					if val then
+					if Value then
 						v.PARRY_COOLDOWN_IN_SECONDS = 0
 						v.PARRY_COOLDOWN_IN_SECONDS_AFTER_SUCCESSFUL_PARRY = 0
 					else
@@ -171,7 +171,7 @@ if game.PlaceId == 4282985734 then
 					end
 				end
 			end
-		end
+		end    
 	})
 end
 
